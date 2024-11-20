@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: auto;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            text-align: center;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Country Information</h1>
+    <form id="country-form">
+        <label for="country-name">Country Name:</label>
+        <input type="text" id="country-name" name="country-name" readonly>
+        <label for="country-info">Information:</label>
+        <textarea id="country-info" name="country-info" placeholder="Enter details about the country..."></textarea>
+        <div class="button-container">
+            <button type="button" id="save-button">Save</button>
+            <button type="button" id="back-button">Back to Map</button>
+        </div>
+    </form>
+
+    <script>
+        // Extract country name from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const countryName = urlParams.get('country') || 'Unknown Country';
+        const countryId = urlParams.get('id') || 'unknown';
+
+        // Populate the form with country details
+        const countryNameInput = document.getElementById('country-name');
+        const countryInfoTextarea = document.getElementById('country-info');
+
+        countryNameInput.value = countryName;
+
+        // Load saved information
+        const savedInfo = JSON.parse(localStorage.getItem('countryInfo')) || {};
+        if (savedInfo[countryName]) {
+            countryInfoTextarea.value = savedInfo[countryName];
+        }
+
+        // Save information to localStorage
+        document.getElementById('save-button').addEventListener('click', function () {
+            savedInfo[countryName] = countryInfoTextarea.value;
+            localStorage.setItem('countryInfo', JSON.stringify(savedInfo));
+            alert(`Information for ${countryName} saved.`);
+        });
+
+        // Go back to the map
+        document.getElementById('back-button').addEventListener('click', function () {
+            window.location.href = "interactive_world_map_with_save.html";
+        });
+    </script>
+</body>
+</html>
